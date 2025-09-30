@@ -37,13 +37,12 @@ end
 % Write a while loop that counts from 1 to 10, and stops after 10 iterations, 
 % printing out results
 
-z = 0;
-a = 1;
+z = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-while z < 10
-    z = a + z;
-    disp(z)
-end
+while i=1:10
+    disp(i)
+
+
 
 
 %% the rest of the prompts (just writing them here so i don't have to keep google docs open).
