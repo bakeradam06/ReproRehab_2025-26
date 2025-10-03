@@ -31,6 +31,8 @@ print(y)
 # Create a dictionary of of numbers 1-3, where each value is another dictionary mapping the number to its square and cube
 # Answer: {1:{“sqaure”: 1; “cube”: 1}}
 
+q = {'1','2','3','4','5'}
+w = {'1','4'}
 
 
 
@@ -42,3 +44,36 @@ print(y)
 # Given a set {1, 2, 3}, check if 2 and 5 are in it
 # From a list [1, 2, 3], generate all unique unordered pairs {(1, 2), (1, 3), (2, 3)} using sets.
 
+
+
+##############################
+# from pod meeting - 10/3/2025
+##############################
+
+# loops
+word = "python"
+for char in word:
+    print(char)
+    
+# overall - while loop
+number = 0
+while number <11:
+    print(number)
+    number = number + 1 
+
+# while loop with break
+number = 0
+while number <11:
+    print(number)
+    break  
+number += 1
+
+# while loop with else
+number = 0
+while number <11:
+    print(number)
+    number += 1
+else:
+    print("number not larger than 9 anymore")
+    
+# can also do a elif compared to a elseif in matlab
