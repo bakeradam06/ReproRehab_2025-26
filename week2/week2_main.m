@@ -1,20 +1,34 @@
-% week 2 main
+% week2 main
 
 
 %% Creating some data
 % Create a folder with name "Data"
 mkdir '/Users/DOB223/Library/CloudStorage/OneDrive-MedicalUniversityofSouthCarolina/Documents/lab/ac/ReproRehab/bootCamp/2week/Data';
-
+mainPath = '/Users/DOB223/Library/CloudStorage/OneDrive-MedicalUniversityofSouthCarolina/Documents/lab/ac/ReproRehab/bootCamp/2week/Data';
 % Within the "Data" folder, add two folders: "Subject 1" & "Subject 2"
+
+% nav to folder
 cd('/Users/DOB223/Library/CloudStorage/OneDrive-MedicalUniversityofSouthCarolina/Documents/lab/ac/ReproRehab/bootCamp/2week/Data')
+% make new folders per subject
 mkdir subject1
 mkdir subject2
-% Within each "Subject X", add two files: data.csv and info.txt
 
+%% Within each "Subject X", add two files: data.csv and info.txt
+% cd subject1
+data = [1,2,3,4,5];
+testInfo = "this is a test file. mua hahahahahah (as an evil villan)";
 
-% for i=1:length()
+% add files
+cd subject1/ % get to subject1 folder 
+writematrix(data, 'data.csv')
+writelines(testInfo,'info.txt')
+cd ..
+cd subject2/ % with this and above line, get to subject2
+writematrix(data, 'data.csv')
+writelines(testInfo,'info.txt') 
+% i'm sure there is better way to do this (loop), but will wait unitl we talk about it in the meeting to proceed with this. 
 
-% Add three numbers, separated by commas in each data.csv (e.g., 1,2,3)
+%% Add three numbers, separated by commas in each data.csv (e.g., 1,2,3)
 
 
 % Add name to info.txt (e.g., Dan)
