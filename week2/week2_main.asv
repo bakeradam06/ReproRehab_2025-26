@@ -3,16 +3,13 @@
 
 %% Creating some data
 % Create a folder with name "Data"
-mkdir '/Users/DOB223/Library/CloudStorage/OneDrive-MedicalUniversityofSouthCarolina/Documents/lab/ac/ReproRehab/bootCamp/2week/Data';
+mkdir'/Users/DOB223/Library/CloudStorage/OneDrive-MedicalUniversityofSouthCarolina/Documents/lab/ac/ReproRehab/bootCamp/2week/Data';
 
 % Within the "Data" folder, add two folders: "Subject 1" & "Subject 2"
-cd('/Users/DOB223/Library/CloudStorage/OneDrive-MedicalUniversityofSouthCarolina/Documents/lab/ac/ReproRehab/bootCamp/2week/Data')
-mkdir subject1
-mkdir subject2
+
+
 % Within each "Subject X", add two files: data.csv and info.txt
 
-
-% for i=1:length()
 
 % Add three numbers, separated by commas in each data.csv (e.g., 1,2,3)
 
