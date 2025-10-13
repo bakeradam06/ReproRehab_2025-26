@@ -154,7 +154,6 @@ data = addvars(data,coh2,coh3,coh4,coh5); % combine with allData table
 % cohData = table2array(data);
     % remove the columns we don't want for now (the subjectID and WMFT time)
 % cohData(:,[2,3]) = [];
-    %% good luck interpreting this one - hello skittles
 % radPlot = spider_plot(cohData);
 %%%%%% end crazy plot %%%%%%%%%
 
@@ -173,6 +172,8 @@ spider = spider_plot(dataSpider);
 
 fig = gcf;
 exportgraphics(fig,'spider.png','Resolution',1200)
+
+%%  
 
 
 
