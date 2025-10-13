@@ -24,29 +24,82 @@
 % survivors in a rehab RCT, but let's have some fun with it shall we?
 
 %% coh data
-coh = rand(1000,"double");
-coh = coh(:,1); % just want one column, lets say these are the subjects
+coh = rand(1000,1); % random, between 0 and 1
 
 %% motor data
 n=1000;
-motor = randi([0, 120], n, 1);
+motor = round(60 + 40*coh + 15*randn(1000,1)); % line from chatGPT. what it does:
+    % 1. multiple coh valeus by 40, scaling upwards to increase coh values to better align to WMFT scale
+    % 2. adding 60 increases the intercept to 60
+    % 3. 15*randn... adds noise to the data so it's not perfectly correlated
+    % 4. round() rounds it to nearest integer. this is fine, or could be one decimal place
+
+    % BIG NOTE: this will make a direct relationship between increased coh and WMFT, whcih isn't necessarily true. 
+    % this is just for illustration purposes
+
+
+% get rid of any motor scores <0 or >120 (the scale of WMFT time)
+motor(motor < 0) = 0;
+motor(motor > 120) = 120;
 
 % add subject info
 subject = [1:1000];
 subject = transpose(subject);
 
-%% combine these data
+%% combine data
 % horz concatenation!
-data = table(splitvars([coh, motor]),'Variable'); % horz cat into table
-data = table(data); 
+data = table([coh, motor]); % horz cat into table
 data = addvars(data,subject); % add subj to table
-data = splitvars(data, 'data');
-data = renamevars(data, "data_2", "WMFT time");
-data = renamevars(data, "data_1", "coherence");
+data = splitvars(data, 'Var1'); % may have to alter this depending on what matlab version used (2024b vs 2025b)
+data = renamevars(data, 'Var1_1', 'Coherence');
+data = renamevars(data, "Var1_2", 'WMFT time');
 
 %% first plot - scatter
 
-scatter(coh,motor)
+% basic
+figure
+scatter(coh, motor) % basic scatter between motor & coh data
+
+% labeling
+ylabel 'WMFT time (s)';
+xlabel 'coherence (a.u.)';
+
+% title
+title 'relationship of coherence vs WMFT time'
+
+%% second plot - scatter more complicated with line & padding on either side
+
+scatter2 = scatter(coh, motor, 'black','MarkerFaceColor','auto','Marker','o');
+% labeling
+ylabel 'WMFT time (s)';
+xlabel 'coherence (a.u.)';
+% title
+title 'relationship of coherence vs WMFT time'
+% regression line
+line = lsline; % "least squares line"
+set(line,'Color','red','LineWidth',3); % customize the line
+
+% add the p value & r, because we all love stats
+r = corr(coh,motor); 
+% r^2
+mdl = fitlm(data.Coherence,data.("WMFT time"),"normal");
+disp(mdl)
+
+r2 = mdl.Rsquared.Ordinary
+%r2 = mdl.Rsquared.Ordinary;
 
 
-   
+% add some padding on L & R side of plot
+ax = gca; % get current axes (gca)
+xLimits = xlim(ax); % xlimits
+yLimits = ylim(ax); % ylimits
+padding = 0.075 * (xLimits(2) - xLimits(1)); % add padding amt
+padding2 = 0.05 * (yLimits(2) - yLimits(1));
+% set new axes
+xlim(ax, [xLimits(1) - padding, xLimits(2) + padding]); % apply padding to xlim
+ylim(ax, [yLimits(1) - padding2, yLimits(2) + padding2]); % apply padding to ylim
+
+% lets save so looks higher resolution for publication
+
+
+
