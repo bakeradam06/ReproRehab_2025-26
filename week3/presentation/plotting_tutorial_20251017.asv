@@ -146,22 +146,30 @@ data = addvars(data,coh2,coh3,coh4,coh5); % combine with allData table
 % the spider_plot command doesn't allow tables, so we're going to make a
     % separate array that has only coherence data
 
-% convert to array
-cohData2 = cohDatcohData
 
-% remove the columns we don't want for now (the subjectID and WMFT time)
-cohData(:,[2,3]) = [];
-    
-%% good luck interpreting this one - hello skittles
-radPlot = spider_plot(cohData);
+% but first, since plotting n=1000 is a mess (run this code below):
 
-%% let's try something different
-meanCoh = mean(cohData,1);
-names = {'1','2','3','4','5'};
-radPlot = spider_plot((meanCoh(:).'), ...
-    'AxesLabels', {'1','2','3','4','5'}, ...
-    'AxesLimits', [0 1]);
+%%%%% crazy plot %%%%%%%%%
+    % convert to array
+% cohData = table2array(data);
+    % remove the columns we don't want for now (the subjectID and WMFT time)
+% cohData(:,[2,3]) = [];
+    %% good luck interpreting this one - hello skittles
+% radPlot = spider_plot(cohData);
+%%%%%% end crazy plot %%%%%%%%%
 
+% now, to get more comprehensible plot, we need to decrease the amt of data
+% going into the plot. 
+% Let's try something here:
+% take random 20 subjects from sample, then we're plotting them in spider.
+randIdx = randsample(height(data),20);
+
+dataSpider = data(randIdx,:);
+dataSpider = table2array(dataSpider);
+dataSpider(:,[2 3]) = [];
+
+% now let's plot with spider
+spider = spider_plot(dataSpider)
 
 
 
