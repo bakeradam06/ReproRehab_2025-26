@@ -18,14 +18,17 @@ mkdir subject2
 data = [1,2,3,4,5];
 testInfo = "this is a test file. mua hahahahahah (as an evil villan)";
 
-%%
-for i=1:length(list)
-    writematrix(data, 'data.csv')
-    writelines(testInfo,'info.txt')
-end
+% add files
+cd subject1/ % get to subject1 folder 
+writematrix(data, 'data.csv')
+writelines(testInfo,'info.txt')
+cd ..
+cd subject2/ % with this and above line, get to subject2
+writematrix(data, 'data.csv')
+writelines(testInfo,'info.txt') 
+% i'm sure there is better way to do this (loop), but will wait unitl we talk about it in the meeting to proceed with this. 
 
-
-% Add three numbers, separated by commas in each data.csv (e.g., 1,2,3)
+%% Add three numbers, separated by commas in each data.csv (e.g., 1,2,3)
 
 
 % Add name to info.txt (e.g., Dan)
@@ -57,3 +60,25 @@ end
 
 
 % MATLAB only: pre-allocate an array to hold your data
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%% week 2 pod meeting %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% dir() for parsing through folder in matlab
+%   matlab equivalent is string.startsWith
+
+
+%%
+tic
+dataWo = [];
+for i = 1:10000000000
+    dataWo(i) = i^2;
+end
+toc
+
+%% 
+tic 
+dataW = zeroe[]

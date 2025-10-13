@@ -3,9 +3,10 @@
 # fun, not actually exercise 1: Hello, World!
 print("Hello, World!")
 
-
-# real exercises, starting at 4. 1-3 are in the m file within this folder: 
-
+#############################################
+# real exercises, starting at 4. 1-3 are in the m 
+# file within this folder
+#############################################
 
 # prompt 4:
 # List Comprehensions (Python only):
@@ -37,12 +38,13 @@ w = {'1','4'}
 
 
 
-
 # prompt 6
 # Sets (Python only):
 # Turn a list [1, 2, 2, 3, 4, 4, 5] into {1, 2, 3, 4, 5} using a set
 # Given a set {1, 2, 3}, check if 2 and 5 are in it
 # From a list [1, 2, 3], generate all unique unordered pairs {(1, 2), (1, 3), (2, 3)} using sets.
+
+
 
 
 

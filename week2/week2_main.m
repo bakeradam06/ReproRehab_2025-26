@@ -60,3 +60,29 @@ writelines(testInfo,'info.txt')
 
 
 % MATLAB only: pre-allocate an array to hold your data
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%% week 2 pod meeting %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% dir() for parsing through folder in matlab
+%   matlab equivalent is string.startsWith
+
+
+%%
+tic
+dataWo = [];
+for i = 1:10000000000
+    dataWo(i) = i^2;
+end
+toc
+
+%% 
+tic 
+dataW = zeros(1,10000000000);
+for i = 1:10000000000
+    dataw(i) = i^2;
+end
+toc
