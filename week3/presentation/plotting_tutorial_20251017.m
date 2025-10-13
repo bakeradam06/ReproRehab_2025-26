@@ -98,7 +98,32 @@ padding2 = 0.05 * (yLimits(2) - yLimits(1));
 xlim(ax, [xLimits(1) - padding, xLimits(2) + padding]); % apply padding to xlim
 ylim(ax, [yLimits(1) - padding2, yLimits(2) + padding2]); % apply padding to ylim
 
-% lets save so looks higher resolution for publication
+%% lets save so looks higher resolution for publication
 
-exportgraphics(fig,'scatter2.png', 'Resolution', 600);
+%exportgraphics(fig,'scatter2.png', 'Resolution', 50); % attempt 1 to show how bad it can be 
+exportgraphics(fig,'scatter2.png', 'Resolution', 1200); % att 2 to see how good it can get
 
+%% now onto bigger & better things - let's look at violin pots!
+% similar to boxplot. we're going to use the same dataset as above
+
+figure
+x = violin(data.Coherence,'facecolor',[0.5 1 0],'facealpha',0.25); % right off the bat, this is what it looks like
+
+figure
+y = violin(data.Coherence,'facecolor',[0.5 1 0]); % update the color a bit
+
+figure 
+z = violin(data.Coherence,'facecolor',[0.5 1 0],'facealpha',0.25); % now add transparency
+
+% how about we look at the WFMT scores now.. 
+figure 
+t = violin(data.("WMFT time")); % basic, no fancy things like above
+
+% what if we wanted to plot them at the same time???? 
+
+%%
+figure 
+j = violin(data.("WMFT time"),'facealpha',0.25);
+hold on
+i = violin(data.Coherence,'facecolor',[0 0 1],'facealpha',0.25);
+hold off

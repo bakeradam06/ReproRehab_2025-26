@@ -69,6 +69,7 @@ title 'relationship of coherence vs WMFT time'
 
 %% second plot - scatter more complicated with line & padding on either side
 
+fig = figure
 scatter2 = scatter(coh, motor, 'black','MarkerFaceColor','auto','Marker','o');
 % labeling
 ylabel 'WMFT time (s)';
@@ -82,12 +83,10 @@ set(line,'Color','red','LineWidth',3); % customize the line
 % add the p value & r, because we all love stats
 r = corr(coh,motor); 
 % r^2
-mdl = fitlm(data.Coherence,data.("WMFT time"),"normal");
+mdl = fitlm(data.Coherence,data.("WMFT time"));
 disp(mdl)
 
-r2 = mdl.Rsquared.Ordinary
-%r2 = mdl.Rsquared.Ordinary;
-
+r2 = mdl.Rsquared.Ordinary % returns 0.3614 with data as of 9am 10/13/25
 
 % add some padding on L & R side of plot
 ax = gca; % get current axes (gca)
@@ -99,7 +98,29 @@ padding2 = 0.05 * (yLimits(2) - yLimits(1));
 xlim(ax, [xLimits(1) - padding, xLimits(2) + padding]); % apply padding to xlim
 ylim(ax, [yLimits(1) - padding2, yLimits(2) + padding2]); % apply padding to ylim
 
-% lets save so looks higher resolution for publication
+%% lets save so looks higher resolution for publication
 
+%exportgraphics(fig,'scatter2.png', 'Resolution', 50); % attempt 1 to show how bad it can be 
+exportgraphics(fig,'scatter2.png', 'Resolution', 1200); % att 2 to see how good it can get
 
+%% now onto bigger & better things - let's look at violin pots!
+% similar to boxplot. we're going to use the same dataset as above
 
+figure
+x = violin(data.Coherence,'facecolor',[0.5 1 0],'facealpha',0.25); % right off the bat, this is what it looks like
+
+figure
+y = violin(data.Coherence,'facecolor',[0.5 1 0]); % update the color a bit
+
+figure 
+z = violin(data.Coherence,'facecolor',[0.5 1 0],'facealpha',0.25); % now add transparency
+
+% how about we look at the WFMT scores now.. 
+figure 
+t = violin(data.("WMFT time")); % basic, no fancy things like above
+
+% what if we wanted to plot them at the same time???? 
+
+figure 
+j = violin(data.("WMFT time"),'facealpha'
+    )
