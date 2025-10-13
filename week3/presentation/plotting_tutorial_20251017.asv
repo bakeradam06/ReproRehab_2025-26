@@ -37,7 +37,7 @@ subject = transpose(subject);
 
 %% combine these data
 % horz concatenation!
-data = table([coh, motor]); % horz cat into table
+data = table(splitvars([coh, motor]),'Variable'); % horz cat into table
 data = table(data); 
 data = addvars(data,subject); % add subj to table
 data = splitvars(data, 'data');
