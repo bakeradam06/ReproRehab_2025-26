@@ -51,7 +51,7 @@ subject = transpose(subject);
 data = table([coh, motor]); % horz cat into table
 data = addvars(data,subject); % add subj to table
 data = splitvars(data, 'Var1'); % may have to alter this depending on what matlab version used (2024b vs 2025b)
-data = renamevars(data, 'Var1_1', 'Coherence');
+data = renamevars(data, 'Var1_1', 'coh1');
 data = renamevars(data, "Var1_2", 'WMFT time');
 
 %% first plot - scatter
@@ -69,7 +69,7 @@ title 'relationship of coherence vs WMFT time'
 
 %% second plot - scatter more complicated with line & padding on either side
 
-fig = figure
+fig = figure;
 scatter2 = scatter(coh, motor, 'black','MarkerFaceColor','auto','Marker','o');
 % labeling
 ylabel 'WMFT time (s)';
@@ -83,10 +83,10 @@ set(line,'Color','red','LineWidth',3); % customize the line
 % add the p value & r, because we all love stats
 r = corr(coh,motor); 
 % r^2
-mdl = fitlm(data.Coherence,data.("WMFT time"));
+mdl = fitlm(data.coh1,data.("WMFT time"));
 disp(mdl)
 
-r2 = mdl.Rsquared.Ordinary % returns 0.3614 with data as of 9am 10/13/25
+r2 = mdl.Rsquared.Ordinary; % returns 0.3614 with data as of 9am 10/13/25
 
 % add some padding on L & R side of plot
 ax = gca; % get current axes (gca)
@@ -107,20 +107,63 @@ ylim(ax, [yLimits(1) - padding2, yLimits(2) + padding2]); % apply padding to yli
 % we're going to use the same dataset as above
 
 figure
-x = violin(data.Coherence,'facecolor',[0.5 1 0],'facealpha',0.25); % right off the bat, this is what it looks like
+x = violin(data.coh1,'facecolor',[0.5 1 0],'facealpha',0.25); % right off the bat, this is what it looks like
 
 figure
-y = violin(data.Coherence,'facecolor',[0.5 1 0]); % update the color some
+y = violin(data.coh1,'facecolor',[0.5 1 0]); % update the color some
 
 figure 
-z = violin(data.Coherence,'facecolor',[0.5 1 0],'facealpha',0.25); % now add some transparency
+z = violin(data.coh1,'facecolor',[0.5 1 0],'facealpha',0.25); % now add some transparency
 
 % look at the WFMT scores.. 
 figure 
 t = violin(data.("WMFT time")); % basic, no fancy things like above..
 
-% save fig
+%% save
 fig = gcf; % gcf = get current figure
 
 % exportgraphics(fig,'violinWMFT.png','Resolution',50) % uber low res
-% exportgraphics(fig,'violinWMFT.png','Resolution',1200) % uber high res(might take a couple min to save
+% exportgraphics(fig,'violinWMFT.png','Resolution',1200) % uber high res (might take a couple min to save)
+
+%% clear out the old stuff
+clear coh coh2 coh3 coh4 coh5 fig line padding r2 r scatter2 subject ax ...
+    yLimits xLimits t x y z mdl padding2
+
+%% spider/radar plots
+
+% let's add some layers of data. We need more coh data for a spider
+% first, assume the preivous coh data is between bilateral M1's. 
+
+% next, we'll add some "data" to simulate different coh values between different brain region pairs
+coh2 = rand(1000,1); % "lesioned PM & lesioned M1"
+coh3 = rand(1000,1); % "lesioned PM & lesioned SMA"
+coh4 = rand(1000,1); % "lesioned SMA & lesioned M1"
+coh5 = rand(1000,1); % "lesioned M1 & lesioned S1"
+
+data = addvars(data,coh2,coh3,coh4,coh5); % combine with allData table
+
+%% start plotting
+% the spider_plot command doesn't allow tables, so we're going to make a
+    % separate array that has only coherence data
+
+% convert to array
+cohData2 = cohDatcohData
+
+% remove the columns we don't want for now (the subjectID and WMFT time)
+cohData(:,[2,3]) = [];
+    
+%% good luck interpreting this one - hello skittles
+radPlot = spider_plot(cohData);
+
+%% let's try something different
+meanCoh = mean(cohData,1);
+names = {'1','2','3','4','5'};
+radPlot = spider_plot((meanCoh(:).'), ...
+    'AxesLabels', {'1','2','3','4','5'}, ...
+    'AxesLimits', [0 1]);
+
+
+
+
+
+
