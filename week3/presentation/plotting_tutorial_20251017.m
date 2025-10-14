@@ -171,9 +171,17 @@ dataSpider(:,[2 3]) = [];
 spider = spider_plot(dataSpider);
 
 fig = gcf;
-exportgraphics(fig,'spider.png','Resolution',1200)
+%exportgraphics(fig,'spider.png','Resolution',1200)
 
-%%  
+%%  3d scatter
+% clean up
+clear dataSpider fig randIdx spider coh2 coh3 coh4 coh5
+% head back to data table with everything in it
+
+%% make fig
+figure
+d = scatter3(data.coh1,data.coh2,data.("WMFT time"),'black','+');
+
 
 
 
