@@ -191,31 +191,37 @@ ylabel 'coh region pair 2'
 zlabel 'WMFT time (s)'
 
 % make 3dscatter dance
-% for angle=1:360
-%     view(angle,40);
-%     pause(0.06);
-% end
+for angle=1:360
+    view(angle,40);
+    pause(0.06);
+end
 
-%% as requested, swarm chart
+%% as requested, swarm chart - IN PROGRESS
+
+% create new dataset that'll be easier to vizualize with swarm
+x1 = rand(1,10000);
+x2 = 2 * rand(1,10000);
+x3 = 3 * rand(1,10000);
+
+swarmchart3(x,y,z)
+
 
 % 2d version
-y = [data.("WMFT time") data.coh3 data.coh4];
-
-figure
-swarmchart(data.coh1,y,'filled','hexagram','XJitter','rand','YJitter','rand')
+% y = [data.("WMFT time") data.coh3 data.coh4];
 
 
-%% imagesc - kind of like a heat map
+%figure
+
+%% imagesc - kind of like a heat map. pretty basic just to show
 
 imagesc(dataSpider) % plot the relationship between columns and rows within dataset
 colormap autumn
 colorbar
 
-
 %exportgraphics(fig,'3dScatter.png','Resolution',1200)
 
 
-%% bubble plot
+%% bubble plot - also pretty basic. Not very pretty
 figure
 bubbleData = [data.coh1,data.("WMFT time")];
 sz = rand(1,1000);
