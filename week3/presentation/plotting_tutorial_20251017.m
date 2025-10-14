@@ -126,7 +126,7 @@ fig = gcf; % gcf = get current figure
 % exportgraphics(fig,'violinWMFT.png','Resolution',1200) % uber high res (might take a couple min to save)
 
 %% clear out the old stuff
-clear coh coh2 coh3 coh4 coh5 fig line padding r2 r scatter2 subject ax ...
+clear fig line padding r2 r scatter2 subject ax ...
     yLimits xLimits t x y z mdl padding2
 
 %% spider/radar plots
@@ -175,15 +175,48 @@ fig = gcf;
 
 %%  3d scatter
 % clean up
-clear dataSpider fig randIdx spider coh2 coh3 coh4 coh5
+clear fig randIdx spider
 % head back to data table with everything in it
 
 %% make fig
 figure
-d = scatter3(data.coh1,data.coh2,data.("WMFT time"),'black','+');
+d = scatter3(data.coh1,data.coh2,data.("WMFT time"),36,data.("WMFT time"),'filled'); % add all data (xyz), size of markers,...
+% and then what variable i want the colors to be mapped to (WMFT)
+colormap hot % add specific color map
+colorbar % add colorbar
+
+% label
+xlabel 'coh region pair 1'
+ylabel 'coh region pair 2'
+zlabel 'WMFT time (s)'
+
+% make 3dscatter dance
+% for angle=1:360
+%     view(angle,40);
+%     pause(0.06);
+% end
+
+%% as requested, swarm chart
+
+% 2d version
+y = [data.("WMFT time") data.coh3 data.coh4];
+
+figure
+swarmchart(data.coh1,y,'filled','hexagram','XJitter','rand','YJitter','rand')
 
 
+%% imagesc - kind of like a heat map
+
+imagesc(dataSpider) % plot the relationship between columns and rows within dataset
+colormap autumn
+colorbar
 
 
+%exportgraphics(fig,'3dScatter.png','Resolution',1200)
 
 
+%% bubble plot
+figure
+bubbleData = [data.coh1,data.("WMFT time")];
+sz = rand(1,1000);
+bubblechart(bubbleData(:,1),bubbleData(:,2),sz,"magenta")
