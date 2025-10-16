@@ -5,12 +5,6 @@
 % date script created: 10/13/25
 % date script last edited: 10/16/25
 
-% plots to cover
-    % 1: scatter
-    % 2: violin
-    % 3: spider
-    % 4: forest
-
 
 %% begin simming data - i'll use generic eeg & motor fx data since i'm most familiar with it
 
@@ -53,9 +47,8 @@ data = splitvars(data, 'Var1'); % may have to alter this depending on what matla
 data = renamevars(data, 'Var1_1', 'coh1');
 data = renamevars(data, "Var1_2", 'WMFT time');
 
-%% first plot - scatter
+%% first plot - basic scatter
 
-% basic
 figure
 scatter(coh, motor) % basic scatter between motor & coh data
 
@@ -64,47 +57,50 @@ ylabel 'WMFT time (s)';
 xlabel 'coherence (a.u.)';
 
 % title
-title 'relationship of coherence vs WMFT time'
+title 'relationship of brain connectivity & WMFT time'
 
 %% second plot - scatter more complicated with line & padding on either side
 
 fig = figure;
-scatter2 = scatter(coh, motor, 'black','MarkerFaceColor','auto','Marker','o');
+scatter2 = scatter(coh, motor,'blue','filled','Marker','o');
 % labeling
 ylabel 'WMFT time (s)';
 xlabel 'coherence (a.u.)';
 % title
-title 'relationship of coherence vs WMFT time'
+title 'relationship of brain connectivity vs WMFT time'
+fontsize(20,'pixels')
+fontname('CMU Serif') % PS this is my favorite font
 % regression line
 line = lsline; % "least squares line"
 set(line,'Color','red','LineWidth',3); % customize the line
-
-% add the p value & r, because we all love stats
-r = corr(coh,motor); 
-% r^2
-mdl = fitlm(data.coh1,data.("WMFT time"));
-disp(mdl)
-
-r2 = mdl.Rsquared.Ordinary; % returns 0.3614 with data as of 9am 10/13/25
 
 % add some padding on L & R side of plot
 ax = gca; % get current axes (gca)
 xLimits = xlim(ax); % xlimits
 yLimits = ylim(ax); % ylimits
-padding = 0.075 * (xLimits(2) - xLimits(1)); % add padding amt
-padding2 = 0.05 * (yLimits(2) - yLimits(1));
+padding = 0.075 * (xLimits(2) - xLimits(1)); % add padding amt to x
+padding2 = 0.05 * (yLimits(2) - yLimits(1)); % add padding to y
 % set new axes
 xlim(ax, [xLimits(1) - padding, xLimits(2) + padding]); % apply padding to xlim
 ylim(ax, [yLimits(1) - padding2, yLimits(2) + padding2]); % apply padding to ylim
 
-%% lets save so looks higher resolution for publication
-
-% exportgraphics(fig,'scatter2.png', 'Resolution', 50); % attempt 1 to show how bad saving can be 
-% exportgraphics(fig,'scatter2.png', 'Resolution', 1200); % att 2 to see how good it can
+% lets save so looks higher resolution for our make believe paper
+fig = gcf;
+% exportgraphics(fig,'scatter2.png', 'Resolution', 20); % attempt 1 to show how poor quality a save can be 
+exportgraphics(fig,'scatter2.png', 'Resolution', 1200); % att 2 to see how good it can
 
 %% add some more data 
 
+% use only for violin.
 % next, we'll add some "data" to simulate different coh values between different brain region pairs
+coh2 = 1.5*rand(1000,1); % "lesioned PM & lesioned M1"
+coh3 = 3*rand(1000,1); % "lesioned PM & lesioned SMA"
+coh4 = rand(1000,1); % "lesioned SMA & lesioned M1"
+coh5 = rand(1000,1); % "lesioned M1 & lesioned S1"
+
+data = addvars(data,coh2,coh3,coh4,coh5); % combine with allData table
+
+%% use for all other plotting
 coh2 = rand(1000,1); % "lesioned PM & lesioned M1"
 coh3 = rand(1000,1); % "lesioned PM & lesioned SMA"
 coh4 = rand(1000,1); % "lesioned SMA & lesioned M1"
@@ -112,35 +108,37 @@ coh5 = rand(1000,1); % "lesioned M1 & lesioned S1"
 
 data = addvars(data,coh2,coh3,coh4,coh5); % combine with allData table
 
-
-%% now onto bigger & better things - let's look at violin pots!
-% we're going to use the same dataset as above
+%% now onto bigger & better things - let's look at violin plots!
+% we're going to use similar dataset as above, just a little more variables (all sim data)
 
 figure
 x = violin(data.coh1); % right off the bat, this is what it looks like
-%%
-% update it some - color, transparency for x, add y and overlay it onto x. same with z
+%% better violin
+% update it some - color, transparency for x, add y and overlay it onto x. same with z.
 figure
-x = violin(data.coh1,'facecolor',[0.3, 0.7, 1],'facealpha',0.4); % color = sky-ish blue, lowest opaque-ness
-hold on % stack plots on top of each other
-y = violin(data.coh2,'facecolor',[1, 0.4, 0.4],'facealpha',0.5);  % red-ish color, medium opaque
+x = violin(data.coh1,'facecolor',[0.3, 0.7, 1],'facealpha',0.2); % color = sky-ish blue, lowest opaque-ness
+hold on   % stack plots on top of each other
+y = violin(data.coh2,'facecolor',[1, 0.4, 0.4],'facealpha',0.45);  % orange-ish color, medium opaque
 z = violin(data.coh3,'facecolor',[1, 0.8, 0.2],'facealpha',0.75); % gold-ish color, most opaque
 
-%% play with the order of layout
-% using zorder/children/uistack
+% play with the order of layout using zorder/children/uistack
 uistack(z,'bottom') % gold plot in the back, most opaque
 uistack(x,'top') % blue-ish plot, least opaque, up in the front
-
 fontname('CMU Serif')
 fontsize(21,'pixels')
 title 'brain connectivity, coh1-3'
-
-%% save
+xlabel 'frequency of occurrence'
+ylabel 'brain connectivity value'
+% save
 fig = gcf; % gcf = get current figure
+exportgraphics(fig,'violinWMFT.png','Resolution',1200) % over-kill high res
 
-% exportgraphics(fig,'violinWMFT.png','Resolution',5) % uber low res
-% exportgraphics(fig,'violinWMFT.png','Resolution',1200) % over-kill high res
-exportgraphics(fig,'violinWMFT.png','Resolution',500) % reasonably high res
+%%%%%%%%%%%%%%%%
+% Note for Adam: go back and re-make the data using hte "not for violin" section above
+% regarding data. line 104-107.
+% you changed around the data some for plotting the overlay of the violin in the second
+% violin plotting part.
+%%%%%%%%%%%%%%%%
 
 %% clear out the old stuff
 clear fig line padding r2 r scatter2 subject ax ...
@@ -148,35 +146,44 @@ clear fig line padding r2 r scatter2 subject ax ...
 
 %% spider/radar plots
 
-% the spider_plot command doesn't allow tables, so we're going to make a
+% spider_plot command doesn't allow tables, so we're going to make a
     % separate array that has only coherence data
 
+    % convert to array
+cohData = table2array(data);
 
 % but first, since plotting n=1000 is a mess (run this code below):
-
-%%%%% crazy plot %%%%%%%%%
-    % convert to array
-% cohData = table2array(data);
+%%%% crazy plot %%%%%%%%%
     % remove the columns we don't want for now (the subjectID and WMFT time)
-% cohData(:,[2,3]) = [];
-% radPlot = spider_plot(cohData);
+cohData(:,[2,3]) = [];
+radPlot = spider_plot(cohData);
+title 'spider plot, all the observations of brain activity'
+exportgraphics(radPlot,'badSpider.png','Resolution',600)
 %%%%%% end crazy plot %%%%%%%%%
-
-% now, to get more comprehensible plot, we need to decrease the amt of data
-% going into the plot. 
-% Let's try something here:
+%%
+% need to decrease the amt of data to actually know what we're looking at
 % take random 20 subjects from sample, then we're plotting them in spider.
 randIdx = randsample(height(data),10);
 
 dataSpider = data(randIdx,:);
 dataSpider = table2array(dataSpider);
 dataSpider(:,[2 3]) = [];
-
 % now let's plot with spider
-spider = spider_plot(dataSpider);
+spider = spider_plot(dataSpider,...
+    'AxesLabels', {'Coh1','Coh2','Coh3','Coh4','Coh5'},...
+    'LabelFont', 'CMU Serif',... % one font to rule them all 
+    'FillOption', 'on',...
+    'FillTransparency', 0.1,...
+    'AxesFontSize', 15,...
+    'LabelFontSize', 15,...
+    'AxesShadedTransparency', 0.45); % there are a lot of other arguments you can do. see link below
 
-fig = gcf;
-%exportgraphics(fig,'spider.png','Resolution',1200)
+% save
+exportgraphics(spider,'goodSpider.png','Resolution',400)
+
+% credit to Moses at
+% https://www.mathworks.com/matlabcentral/fileexchange/59561-spider_plot 
+% for creating this toolbox
 
 %%  3d scatter
 % clean up
