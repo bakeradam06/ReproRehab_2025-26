@@ -3,14 +3,13 @@
 
 % author: ab
 % date script created: 10/13/25
-% date script last edited: 10/13/25
+% date script last edited: 10/16/25
 
 % plots to cover
     % 1: scatter
-    % 2: box
-    % 3: violin
+    % 2: violin
+    % 3: spider
     % 4: forest
-    % 5: spider
 
 
 %% begin simming data - i'll use generic eeg & motor fx data since i'm most familiar with it
@@ -190,7 +189,7 @@ xlabel 'coh region pair 1'
 ylabel 'coh region pair 2'
 zlabel 'WMFT time (s)'
 
-% make 3dscatter dance
+% make scatter dance
 for angle=1:360
     view(angle,40);
     pause(0.06);
@@ -199,24 +198,18 @@ end
 %% as requested, swarm chart - IN PROGRESS
 
 % create new dataset that'll be easier to vizualize with swarm
-x1 = rand(1,10000);
-x2 = 2 * rand(1,10000);
-x3 = 3 * rand(1,10000);
 
-swarmchart3(x,y,z)
-
-% need to manipulate a couple other coh values 
-
-
-
-
-% 2d version
-% y = [data.("WMFT time") data.coh3 data.coh4];
+% swarm chart is nice when you have multiple arrays
+r = [ones(1,300) 2 * ones(1,300) 3 * ones(1,300)];
+x1 = 27 * rand(1,300);
+x2 = 35 * rand(1,300);
+x3 = 40 * rand(1,300);
+x = [x1 x2 x3];
+swarmchart(r,x)
 
 
-%figure
 
-%% imagesc - kind of like a heat map
+%% imagesc - kind of like a heat map. pretty basic just to show
 
 imagesc(dataSpider) % plot the relationship between columns and rows within dataset
 colormap autumn
@@ -224,8 +217,60 @@ colorbar
 
 %exportgraphics(fig,'3dScatter.png','Resolution',1200)
 
+%% forest plot
+% fun fact, also called a "blobbogram"
 
-%% bubble plot
+% simulate some fake data that might be in a meta analysis or somethingh
+effectSizes = rand(100,1); % generate data, effect size
+effectSizes = sort(effectSizes,'descend'); % sort said data
+confInts1 = rand(100,1); % generate the conf int (bottom) for it
+confInts1 = sort(confInts1,'descend'); % sort
+confInts2 = rand(100,1); % generate conf ints (top) for it
+confInts2 = sort(confInts2,'descend'); % sort
+
+%% chatGPT's better version of the above code: 
+
+% n
+n = 100;
+
+% Sim effect sizes: centered around 0.5 with some noise
+effectSizes = 0.5 + 0.2*randn(n,1);  % Normal-ish distribution
+
+% Simulate SE
+SEs = 0.05 + 0.05*rand(n,1);  % Between 0.05 and 0.10
+
+% Compute confidence intervals: 95% CI = effect ± 1.96*SE
+confIntsLower = effectSizes - 1.96 .* SEs;
+confIntsUpper = effectSizes + 1.96 .* SEs;
+
+% Optional: Sort everything by descending effect size
+[effectSizes, sortIdx] = sort(effectSizes, 'descend');
+confIntsLower = confIntsLower(sortIdx);
+confIntsUpper = confIntsUpper(sortIdx);
+forestData = table(effectSizes,confIntsLower,confIntsUpper);
+forestplot(effectSizes,confIntsLower,confIntsUpper)
+
+%% section from tutorial of qi an's forestplot package
+% will say, this was a difficult one for me to generate on my own
+% expects you to be working with odds ratio or relative risk, not
+    %  necessarily other types of data, like effect sizes & confidence
+    % intervals
+response=round(rand(100, 1)); % generate response variable (0,1)
+predictor=round(rand(100, 1)); % generate predictor variable (again, 0 or 1)
+subgroup=round(rand(100, 3)); % generate which subgroup they were in (1, 2, 3)
+forestplot(response, predictor, subgroup, 'stat', 'or'); % plot
+
+% labels: auto-populates x and y based on forest command. no need to specify
+fig = gcf;
+title 'ORs of treatment response based on subgroups within study'
+fontsize(fig,20,"pixels") % change font size
+fontname(fig,"CMU Serif") % c
+
+% save
+
+exportgraphics(fig,'forestTemplate.png','Resolution',400)
+
+%% bubble plot - also pretty basic. Not very pretty
 figure
 bubbleData = [data.coh1,data.("WMFT time")];
 sz = rand(1,1000);
