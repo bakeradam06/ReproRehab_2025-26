@@ -111,33 +111,36 @@ coh4 = rand(1000,1); % "lesioned SMA & lesioned M1"
 coh5 = rand(1000,1); % "lesioned M1 & lesioned S1"
 
 data = addvars(data,coh2,coh3,coh4,coh5); % combine with allData table
+
+
 %% now onto bigger & better things - let's look at violin pots!
 % we're going to use the same dataset as above
 
 figure
-
-
-% x = violin(data.coh1); % right off the bat, this is what it looks like
+x = violin(data.coh1); % right off the bat, this is what it looks like
 %%
 % update it some - color, transparency for x, add y and overlay it onto x. same with z
 figure
-x = violin(data.coh1,'facecolor',[0.1 0.1 0.9],'facealpha',0.4);
-hold on
-y = violin(data.coh2,'facecolor',[0.1 0.1 0.1],'facealpha',0.9);
-z = violin(data.coh3,'facecolor',[1 1 0.5],'facealpha',0.25);
+x = violin(data.coh1,'facecolor',[0.3, 0.7, 1],'facealpha',0.4); % color = sky-ish blue, lowest opaque-ness
+hold on % stack plots on top of each other
+y = violin(data.coh2,'facecolor',[1, 0.4, 0.4],'facealpha',0.5);  % red-ish color, medium opaque
+z = violin(data.coh3,'facecolor',[1, 0.8, 0.2],'facealpha',0.75); % gold-ish color, most opaque
 
-fig = gcf;
 %% play with the order of layout
 % using zorder/children/uistack
-uistack(z,'top')
-uistack(y,'bottom')
+uistack(z,'bottom') % gold plot in the back, most opaque
+uistack(x,'top') % blue-ish plot, least opaque, up in the front
 
+fontname('CMU Serif')
+fontsize(21,'pixels')
+title 'brain connectivity, coh1-3'
 
 %% save
 fig = gcf; % gcf = get current figure
 
-% exportgraphics(fig,'violinWMFT.png','Resolution',50) % uber low res
-% exportgraphics(fig,'violinWMFT.png','Resolution',1200) % uber high res (might take a couple min to save)
+% exportgraphics(fig,'violinWMFT.png','Resolution',5) % uber low res
+% exportgraphics(fig,'violinWMFT.png','Resolution',1200) % over-kill high res
+exportgraphics(fig,'violinWMFT.png','Resolution',500) % reasonably high res
 
 %% clear out the old stuff
 clear fig line padding r2 r scatter2 subject ax ...
@@ -180,11 +183,11 @@ fig = gcf;
 clear fig randIdx spider
 % head back to data table with everything in it
 
-%% make fig
+% make fig - 3dscatter
 figure
 d = scatter3(data.coh1,data.coh2,data.("WMFT time"),36,data.("WMFT time"),'filled'); % add all data (xyz), size of markers,...
 % and then what variable i want the colors to be mapped to (WMFT)
-colormap hot % add specific color map
+colormap autumn % add specific color map
 colorbar % add colorbar
 
 % label
@@ -193,10 +196,19 @@ ylabel 'coh region pair 2'
 zlabel 'WMFT time (s)'
 
 % make scatter dance
-for angle=1:360
-    view(angle,40);
-    pause(0.06);
-end
+% for angle=1:360
+%     view(angle,40);
+%     pause(0.06);
+% end
+
+fig = gcf; % get current fig
+% specify angle/azimuth you want to save it as, so the jpg/png can see all three axes. 
+view(45,30) % make sure you do this for 3dscatters, otherwise you may nto be able to see all three axes well. 
+% play around w the numbers to see what you like most, (45,30) seems to work well. 
+
+savefig('3dScatter.fig') % save as matlab fig for interacting with the 3d-ness of the plot
+exportgraphics(fig,'3dScatter.jpg','Resolution',500) % show that you can save as other filetypes, like jpg 
+exportgraphics(fig,'3dScatter.png','Resolution',500) % or png 
 
 %% as requested, swarm chart - IN PROGRESS
 
