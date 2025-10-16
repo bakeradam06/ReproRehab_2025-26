@@ -99,24 +99,39 @@ ylim(ax, [yLimits(1) - padding2, yLimits(2) + padding2]); % apply padding to yli
 
 %% lets save so looks higher resolution for publication
 
-% exportgraphics(fig,'scatter2.png', 'Resolution', 50); % attempt 1 to show how bad it can be 
-% exportgraphics(fig,'scatter2.png', 'Resolution', 1200); % att 2 to see how good it can get
+% exportgraphics(fig,'scatter2.png', 'Resolution', 50); % attempt 1 to show how bad saving can be 
+% exportgraphics(fig,'scatter2.png', 'Resolution', 1200); % att 2 to see how good it can
 
+%% add some more data 
+
+% next, we'll add some "data" to simulate different coh values between different brain region pairs
+coh2 = rand(1000,1); % "lesioned PM & lesioned M1"
+coh3 = rand(1000,1); % "lesioned PM & lesioned SMA"
+coh4 = rand(1000,1); % "lesioned SMA & lesioned M1"
+coh5 = rand(1000,1); % "lesioned M1 & lesioned S1"
+
+data = addvars(data,coh2,coh3,coh4,coh5); % combine with allData table
 %% now onto bigger & better things - let's look at violin pots!
 % we're going to use the same dataset as above
 
 figure
-x = violin(data.coh1,'facecolor',[0.5 1 0],'facealpha',0.25); % right off the bat, this is what it looks like
 
+
+% x = violin(data.coh1); % right off the bat, this is what it looks like
+%%
+% update it some - color, transparency for x, add y and overlay it onto x. same with z
 figure
-y = violin(data.coh1,'facecolor',[0.5 1 0]); % update the color some
+x = violin(data.coh1,'facecolor',[0.1 0.1 0.9],'facealpha',0.4);
+hold on
+y = violin(data.coh2,'facecolor',[0.1 0.1 0.1],'facealpha',0.9);
+z = violin(data.coh3,'facecolor',[1 1 0.5],'facealpha',0.25);
 
-figure 
-z = violin(data.coh1,'facecolor',[0.5 1 0],'facealpha',0.25); % now add some transparency
+fig = gcf;
+%% play with the order of layout
+% using zorder/children/uistack
+uistack(z,'top')
+uistack(y,'bottom')
 
-% look at the WFMT scores.. 
-figure 
-t = violin(data.("WMFT time")); % basic, no fancy things like above..
 
 %% save
 fig = gcf; % gcf = get current figure
@@ -130,18 +145,6 @@ clear fig line padding r2 r scatter2 subject ax ...
 
 %% spider/radar plots
 
-% let's add some layers of data. We need more coh data for a spider
-% first, assume the preivous coh data is between bilateral M1's. 
-
-% next, we'll add some "data" to simulate different coh values between different brain region pairs
-coh2 = rand(1000,1); % "lesioned PM & lesioned M1"
-coh3 = rand(1000,1); % "lesioned PM & lesioned SMA"
-coh4 = rand(1000,1); % "lesioned SMA & lesioned M1"
-coh5 = rand(1000,1); % "lesioned M1 & lesioned S1"
-
-data = addvars(data,coh2,coh3,coh4,coh5); % combine with allData table
-
-%% start plotting
 % the spider_plot command doesn't allow tables, so we're going to make a
     % separate array that has only coherence data
 
@@ -200,14 +203,13 @@ end
 % create new dataset that'll be easier to vizualize with swarm
 
 % swarm chart is nice when you have multiple arrays
+figure
 r = [ones(1,300) 2 * ones(1,300) 3 * ones(1,300)];
 x1 = 27 * rand(1,300);
 x2 = 35 * rand(1,300);
 x3 = 40 * rand(1,300);
 x = [x1 x2 x3];
 swarmchart(r,x)
-
-
 
 %% imagesc - kind of like a heat map. pretty basic just to show
 
@@ -260,18 +262,40 @@ predictor=round(rand(100, 1)); % generate predictor variable (again, 0 or 1)
 subgroup=round(rand(100, 3)); % generate which subgroup they were in (1, 2, 3)
 forestplot(response, predictor, subgroup, 'stat', 'or'); % plot
 
-% labels: auto-populates x and y based on forest command. no need to specify
 fig = gcf;
 title 'ORs of treatment response based on subgroups within study'
 fontsize(fig,20,"pixels") % change font size
 fontname(fig,"CMU Serif") % change font type (the nostalgic math one)
+% labels: auto-populates x and y based on forest command. no need to specify
 
 % save
-
 exportgraphics(fig,'forestTemplate.png','Resolution',400)
 
-%% bubble plot - also pretty basic. Not very pretty
+%% for zorder/children/uistack...
+% back to a basic scatter plot to demonstrate
+% take our coh data with wmft
+
+% goal: "stack" two scatter plots on top of each other. we'll make them diff colors so
+% easy to see. 
 figure
-bubbleData = [data.coh1,data.("WMFT time")];
-sz = rand(1,1000);
-bubblechart(bubbleData(:,1),bubbleData(:,2),sz,"magenta")
+scat11 = scatter(data.coh1,data.("WMFT time"),'red','filled','o');
+hold on
+scat21 = scatter(data.coh2,data.("WMFT time"),'green','filled','o');
+scat31 = scatter(data.coh3,data.("WMFT time"),'blue','filled','o');
+uistack(scat11,'up',scat31,'bottom')
+
+%% another way to stack: using tiledlayout
+figure
+tiledlayout(2,1) % can do this for however big of data you want essentially. 
+nexttile
+scat12 = scatter(data.coh1,data.("WMFT time"),'red','filled','o');
+title 'brain connectivity vs WMFT time'
+ylabel 'wmft time (s)'
+lsline
+nexttile
+scat22 = scatter(data.coh2,data.("WMFT time"),'green','filled','o');
+lsline
+xlabel 'coh value'
+ylabel 'wmft time (s)'
+
+
