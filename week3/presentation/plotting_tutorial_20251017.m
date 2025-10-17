@@ -189,26 +189,27 @@ exportgraphics(spider,'goodSpider.png','Resolution',400)
 % clean up
 clear fig randIdx spider
 % head back to data table with everything in it
-
+%%
 % make fig - 3dscatter
 figure
 d = scatter3(data.coh1,data.coh2,data.("WMFT time"),36,data.("WMFT time"),'filled'); % add all data (xyz), size of markers,...
 % and then what variable i want the colors to be mapped to (WMFT)
-colormap autumn % add specific color map
+colormap autumn % add specific color map. autumn because it's fall y'all
 colorbar % add colorbar
-
+fig = gcf; % get current fig
 % label
 xlabel 'coh region pair 1'
 ylabel 'coh region pair 2'
 zlabel 'WMFT time (s)'
+fontname(fig,'CMU Serif') % the font that dreams are made of
+fontsize(fig,20,'pixels')
 
 % make scatter dance
-% for angle=1:360
-%     view(angle,40);
-%     pause(0.06);
-% end
+for angle=1:360
+    view(angle,40);
+    pause(0.06);
+end
 
-fig = gcf; % get current fig
 % specify angle/azimuth you want to save it as, so the jpg/png can see all three axes. 
 view(45,30) % make sure you do this for 3dscatters, otherwise you may nto be able to see all three axes well. 
 % play around w the numbers to see what you like most, (45,30) seems to work well. 
@@ -217,29 +218,44 @@ savefig('3dScatter.fig') % save as matlab fig for interacting with the 3d-ness o
 exportgraphics(fig,'3dScatter.jpg','Resolution',500) % show that you can save as other filetypes, like jpg 
 exportgraphics(fig,'3dScatter.png','Resolution',500) % or png 
 
-%% as requested, swarm chart - IN PROGRESS
-
+%% as requested, swarm chart
+% credit to: https://www.mathworks.com/help/matlab/ref/swarmchart.html
 % create new dataset that'll be easier to vizualize with swarm
+% swarm nice when you have multiple arrays
 
-% swarm chart is nice when you have multiple arrays
 figure
-r = [ones(1,300) 2 * ones(1,300) 3 * ones(1,300)];
-x1 = 27 * rand(1,300);
-x2 = 35 * rand(1,300);
-x3 = 40 * rand(1,300);
-x = [x1 x2 x3];
-swarmchart(r,x)
+r = [ones(1,300) 2 * ones(1,300) 3 * ones(1,300)]; % 1x900 array of values, 300 at 1, 300 at 2, and 300 at 3
+x1 = 27 * rand(1,300); % random values 1x300 array
+x2 = 35 * rand(1,300) + 27; % 27: add some noise/change to it
+x3 = 40 * rand(1,300) + 75; % same as above
+x = [x1 x2 x3]; % make array combining x1, x2, x3
+swarmchart(r,x,'filled');
+swarm = gcf;
+fontname(swarm,'CMU Serif')
+fontsize(swarm,20,"pixels")
+title 'swarm chart 101'
+xlabel 'xvalues, say conditions 1-3'
+ylabel 'observations made across each condition'
 
-%% imagesc - kind of like a heat map. pretty basic just to show
+exportgraphics(swarm,'swarm101.png','Resolution',600,'BackgroundColor','cyan')
 
-imagesc(dataSpider) % plot the relationship between columns and rows within dataset
-colormap autumn
-colorbar
+%% heatmap
+% pretty simple. kept using dataSpider from above, which is random subset of data, a 10x5
+% matrix. will show relationship between column value and row value.
+% i specified median, not mean, just to show you can do that. there are other options 
+% as well.
+% in this case, the heatmap is just putting the matrix in colored form.
 
-%exportgraphics(fig,'3dScatter.png','Resolution',1200)
+figure
+heatmap(dataSpider,'Title','Heatmap between rows & columns of dataSpider','ColorMethod', ...
+    'median','FontName','CMU Serif','FontSize',20)
+
+heatmap = gcf;
+exportgraphics(heatmap,'heatmap.png','Resolution',600)
 
 %% forest plot
 % fun fact, also called a "blobbogram"
+
 
 % simulate some fake data that might be in a meta analysis or somethingh
 effectSizes = rand(100,1); % generate data, effect size
@@ -271,7 +287,8 @@ confIntsUpper = confIntsUpper(sortIdx);
 forestData = table(effectSizes,confIntsLower,confIntsUpper);
 forestplot(effectSizes,confIntsLower,confIntsUpper)
 
-%% section taken from tutorial of qi an's forestplot package. all credit to that person in this section.
+%% forest plot 
+% tutorial of qi an's forestplot package. all credit to that person for forest
 % difficult one for me to generate on my own, so i used her template to demonstrate.
 % this package expects you to be working with odds ratio or relative risk, not
     %  necessarily other types of data, like effect sizes & confidence intervals, such as in meta analysis
@@ -281,31 +298,31 @@ predictor=round(rand(100, 1)); % generate predictor variable (again, 0 or 1)
 subgroup=round(rand(100, 3)); % generate which subgroup they were in (1, 2, 3)
 forestplot(response, predictor, subgroup, 'stat', 'or'); % plot
 
-fig = gcf;
+forest = gcf;
 title 'ORs of treatment response based on subgroups within study'
-fontsize(fig,20,"pixels") % change font size
-fontname(fig,"CMU Serif") % change font type (the nostalgic math one)
+fontsize(forest,20,"pixels") % change font size
+fontname(forest,"CMU Serif") % change font type (the nostalgic math one)
 % labels: auto-populates x and y based on forest command. no need to specify
 
 % save
-exportgraphics(fig,'forestTemplate.png','Resolution',400)
+exportgraphics(forest,'forestTemplate.png','Resolution',400)
 
 %% for zorder/children/uistack...
 % back to a basic scatter plot to demonstrate
 % take our coh data with wmft
 
-% goal: "stack" two scatter plots on top of each other. we'll make them diff colors so
-% easy to see. 
-figure
-scat11 = scatter(data.coh1,data.("WMFT time"),'red','filled','o');
-hold on
-scat21 = scatter(data.coh2,data.("WMFT time"),'green','filled','o');
-scat31 = scatter(data.coh3,data.("WMFT time"),'blue','filled','o');
-uistack(scat11,'up',scat31,'bottom')
+% % goal: "stack" two scatter plots on top of each other. we'll make them diff colors so
+% % easy to see. 
+% figure
+% scat11 = scatter(data.coh1,data.("WMFT time"),'red','filled','o');
+% hold on
+% scat21 = scatter(data.coh2,data.("WMFT time"),'green','filled','o');
+% scat31 = scatter(data.coh3,data.("WMFT time"),'blue','filled','o');
+% uistack(scat11,'up',scat31,'bottom')
 
 %% another way to stack: using tiledlayout
 figure
-tiledlayout(2,1) % can do this for however big of data you want essentially. 
+stacked = tiledlayout(2,1); % can do this for however big of data you want essentially. 
 nexttile
 scat12 = scatter(data.coh1,data.("WMFT time"),'red','filled','o');
 title 'brain connectivity vs WMFT time'
@@ -316,5 +333,10 @@ scat22 = scatter(data.coh2,data.("WMFT time"),'green','filled','o');
 lsline
 xlabel 'coh value'
 ylabel 'wmft time (s)'
+fontname(stacked,'CMU Serif')
+fontsize(stacked,20,'pixels')
+
+
+exportgraphics(stacked,'stackedPlot.png','Resolution',600)
 
 
