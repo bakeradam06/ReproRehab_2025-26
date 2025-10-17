@@ -29,17 +29,31 @@ writelines(testInfo,'info.txt')
 % i'm sure there is better way to do this (loop), but will wait unitl we talk about it in the meeting to proceed with this. 
 
 %% Add three numbers, separated by commas in each data.csv (e.g., 1,2,3)
+basePath = '/Users/DOB223/Library/CloudStorage/OneDrive-MedicalUniversityofSouthCarolina/Documents/lab/ac/ReproRehab/bootCamp/2week/Data';
+pathStruct = dir(basePath); % create struct containing contents of /Data
+subjDirs = contents([pathStruct.isdir] & startsWith({pathStruct.name},'subject')); % get contents from struct that are (1) isDir and (2) starts with 
+    % subject, as noted in the struct. Returns new struct.
+% construct both subject paths, so then we can loop through them and do operations
+subjPaths = fullfile(basePath,{subjDirs.name});
 
-
-% Add name to info.txt (e.g., Dan)
+%% use subjPaths contents to loop through and complete operation
+for i=1:length(subjPaths)
+    cd(subjPaths{i}) % nav to subject folder. uses i to index value of subjPaths cell array
+    data = readmatrix('data.csv'); % load data.csv within folder
+    data = data([1 2 3]); % change contents
+    writematrix(data,'data.csv'); % save changes
+    % Add name to info.txt (e.g., Dan)
+    txtFile = readlines('info.txt');
+    if i == 1
+        txtFile = 'my name is Harry';
+    else 
+        txtFile = 'my name is Potter';
+    end
+    writelines(txtFile,'info.txt');
+end
 
 
 % Make sure numbers and names are unique to subject
-
-
-
-
-
 
 
 %% Script
@@ -63,9 +77,12 @@ writelines(testInfo,'info.txt')
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%% week 2 pod meeting %%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%% week 2 pod meeting notes %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % dir() for parsing through folder in matlab
 %   matlab equivalent is string.startsWith

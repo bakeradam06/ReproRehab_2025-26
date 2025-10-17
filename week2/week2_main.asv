@@ -29,6 +29,31 @@ writelines(testInfo,'info.txt')
 % i'm sure there is better way to do this (loop), but will wait unitl we talk about it in the meeting to proceed with this. 
 
 %% Add three numbers, separated by commas in each data.csv (e.g., 1,2,3)
+basePath = '/Users/DOB223/Library/CloudStorage/OneDrive-MedicalUniversityofSouthCarolina/Documents/lab/ac/ReproRehab/bootCamp/2week/Data';
+pathStruct = dir(basePath); % create struct containing contents of /Data
+subjDirs = contents([pathStruct.isdir] & startsWith({pathStruct.name},'subject')); % get contents from struct that are (1) isDir and (2) starts with 
+    % subject, as noted in the struct. Returns new struct.
+% construct both subject paths, so then we can loop through them and do operations
+subjPaths = fullfile(basePath,{subjDirs.name});
+
+%% use subjPaths contents to loop through and complete operation
+for i=1:length(subjPaths)
+    cd(subjPaths{i}) % nav to subject folder
+    data = readmatrix('data.csv'); % load data.csv within folder
+    data = data([1 2 3]); % change contents
+    writematrix(data,'data.csv'); % save changes
+end
+
+
+
+%% quiz from chat: 
+% 'what would this return?' 
+basePath = '/Users/DOB223/Library/CloudStorage/OneDrive-MedicalUniversityofSouthCarolina/Documents/lab/ac/ReproRehab/bootCamp/2week/Data';
+contents = dir(basePath);
+subjectDirs = contents([contents.isdir] & startsWith({contents.name}, 'subject'));
+subjectPaths = fullfile(basePath,{subjectDirs.name}); % returns subjectPaths as 1x2 cell array
+
+
 
 
 % Add name to info.txt (e.g., Dan)
@@ -63,6 +88,9 @@ writelines(testInfo,'info.txt')
 
 
 
+
+
+%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%% week 2 pod meeting %%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -81,4 +109,8 @@ toc
 
 %% 
 tic 
-dataW = zeroe[]
+dataW = zeros(1,10000000000);
+for i = 1:10000000000
+    dataw(i) = i^2;
+end
+toc
