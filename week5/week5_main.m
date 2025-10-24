@@ -1,11 +1,11 @@
 % week5 main
 
 % For the code below:
-% ●	Break the single function into smaller functions where each has a single purpose
-% ●	Give meaningful and consistent names to functions and variables
-% ●	Add input validation to ensure arguments are of expected types and in valid ranges
-% ●	Use argument blocks or default parameter values to make inputs flexible
-% ●	Add docstrings or comments explaining the purpose, inputs, outputs, and behavior of each function
+% Break the single function into smaller functions where each has a single purpose
+% Give meaningful and consistent names to functions and variables
+% Add input validation to ensure arguments are of expected types and in valid ranges
+% Use argument blocks or default parameter values to make inputs flexible
+% Add docstrings or comments explaining the purpose, inputs, outputs, and behavior of each function
 
 
 function [s, avg, max_val, min_val] = calc(vals)

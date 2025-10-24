@@ -4,29 +4,25 @@
 
 %% 1.	Create a time variable that starts at 0 and ends at 2*pi
         % a. use whatever granularity you want
-tiempo = [0:0.00001:2*pi];
+tiempo = [0:0.0001:2*pi];
 
 %% 2.	Create a sine wave variable
 sign = sin(tiempo);
 
 %% 3.	Create an animation of the sine wave over time 
-    % a.	You should see the wave get create
+    % a.	You should see the wave get created
+    % b.	Save .gif
 figure
 p = animatedline;
-drawnow % if you uncomment this, it won't precompute and will be slower. goes with comments below
 
 for i = 1:length(tiempo)
-    addpoints(p,tiempo(i),sign(i));
-    drawnow limitrate % cahnge to update if want slow version
+    addpoints(p,tiempo,sign);
+    drawnow
 end
-drawnow % comment out for non-precompute
 
-% help from:
-% PrecomputeDataThenCreateAnimationExample.m example
-% UseDrawnowUpdateForFastAnimationExample.m example
-
-% b.	Save as .gif
-
+% for i=1:length(tiempo)
+%     animatedline(tiempo(i),sign(i))
+% end
 
 %% 4.	Create a cosine wave variable
 
