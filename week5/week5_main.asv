@@ -12,13 +12,13 @@
 % helps me figure out how to break the large function into multiple different ones.
 
 values = [5, 10, 15, 20]; % list the values to be used in the function
-[s] = calc();
+calc()
     
     function [s] = calc() % defining function, inputs & outputs
         s = 0; % define s
     end
 
-[s, values] = loop(values);
+loop(values)
     
     function [s, values] = loop(values)
         for i = 1:length(values) % initiate loop, length of vals variable
@@ -26,7 +26,7 @@ values = [5, 10, 15, 20]; % list the values to be used in the function
         end % terminate loop
     end
     
-[s, avg, min_val, max_val] = calculate(s, values); % run the function on above values
+calculate(s, values); % run the function on above values
 
     function [avg, max_val, min_val] = calculate(values, s)
         avg = s/length(values); % calculate avg of s/length(vals)
@@ -35,8 +35,8 @@ values = [5, 10, 15, 20]; % list the values to be used in the function
     
     end
     
-[d] = printing(s, avg, max_val, min_val);
+printing(s, avg, max_val, min_val)
 
     function [s, avg, max_val, min_val] = printing(s, avg, max_val, min_val)
-        d = fprintf('Sum: %d Average: %.2f Maximum: %d Minimum: %d', s, avg, max_val, min_val); % print avg, min, max
+        fprintf('Sum: %d Average: %.2f Maximum: %d Minimum: %d', s, avg, max_val, min_val); % print avg, min, max
     end
