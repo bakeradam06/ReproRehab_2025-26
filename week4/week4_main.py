@@ -1,18 +1,19 @@
 # week4 main
+#%%
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import math
 
-
+#%%
 pi = math.pi
 
 # Waves
 # 1.	Create a time variable that starts at 0 and ends at 2*pi
     # a.	use whatever granularity you want
+time = np.arange(0, 2*pi, 0.001)
 
-time = np.linspace(0, 0.0025, int(2*pi))
-
+#%%
 # 2.	Create a sine wave variable
 sine1 = np.sin(time)
 
@@ -20,7 +21,7 @@ sine1 = np.sin(time)
     # a.	You should see the wave get created    
 fig, ax = plt.subplots()
 
-ax.set(xlim=[0, 10000], ylim=[-4, 1000])
+ax.set(xlim=[0, 10], ylim=[-4, 20])
 
 scat = ax.scatter(time[0],sine1[0])
 line2 = ax.plot(time[0],sine1[0])
@@ -82,3 +83,5 @@ plt.show()
 
 
 # 4.	Animate  X (on x axis),Y (on y axis), and Time (on z axis) on the same figure to produce a 3D spiral (see examples below)
+
+# %%
