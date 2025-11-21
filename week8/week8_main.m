@@ -5,13 +5,34 @@
 
  
 %% Data
-    % 1.	Generate two sets of data (2D matrices) that will represent the control and test groups walking speed 
+    % 1.	Generate two sets of data (2D matrices) that will represent the control and test groups walking speed
         % a.	The control group has 21 participants and completed 100 trials each
+            control = zeros(100,21);
+            treat = zeros(100,21);
+
             % i.	Generate with normal random, mean of 7, standard deviation of 1.2
+            muControl = 7;
+            sigmaControl = 1.2;
+            control = sigmaControl.*randn(100,21) + muControl; 
+
         % b.	The test group has 17 participants and completed 100 trials each 
             % i.	Generate with normal random, mean of 3, standard deviation of 5
 
-            
+            muTreat = 3;
+            sigmaTreat = 5;
+            treat = sigmaTreat.*randn(100,21) + muTreat;
+
+% note: used the matlab help section to generate this code. I didn't know
+% how to generate an array with specific meawn or sd. now i do!
+
+
+           % check: 
+           x1 = mean(mean(control(:,:))); 
+           y1 = mean(std(control(:,:)));
+
+
+           x = mean(mean(treat(:,:))); % returns mean of means per column
+           y = mean(std(treat)); % returns mean of stdev per column
 
 %% Summarize Data
 
