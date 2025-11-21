@@ -36,21 +36,58 @@
 
 %% Summarize Data
 
-
 % 1.	Calculate the average walking speed per participant (across trials) for each group
-% 2.	Calculate the standard deviation of walking speed per participant (across trials) for each group
-% 3.	Calculate the average walking speed per trial (across participants) for each group
-% 4.	Calculate the standard deviation of walking speed per trial (across participants) for each group
+        meanByPtCntrl = [ ];
+        for col = 1:width(control)
+            meanTemp = mean(control(:,col));
+            meanByPtCntrl = vertcat(meanByPtCntrl,meanTemp);
+        end
+
+        meanByPtTrt = [ ];
+        for col = 1:width(treat)
+            meanTemp = mean(treat(:,col));
+            meanByPtTrt = vertcat(meanByPtTrt,meanTemp);
+        end
+
+        % returns 21x1 array of means by column (avging across trials by participant)
 
 
+
+        % no help on this section, juist trial and error
+
+%% 2.	Calculate the standard deviation of walking speed per participant (across trials) for each group
+        stdByPtCntrl = [ ];
+        for col = 1:width(control)
+            stdTemp = std(control(:,col));
+            stdByPtCntrl = vertcat(stdByPtCntrl,stdTemp);
+        end
+        
+        stdByPtTrt = [ ];
+        for col = 1:width(treat)
+            stdTemp = std(treat(:,col));
+            stdByPtTrt = vertcat(stdByPtTrt,stdTemp);
+        end
+
+%% 3.	Calculate the average walking speed per trial (across participants) for each group
+        meanControl = mean(control);
+        meanTreat = mean(treat); % returns 1x21 array of means across pts by trial
+
+
+%% 4.	Calculate the standard deviation of walking speed per trial (across participants) for each group
+        sdControl = std(control);
+        sdTreat = std(treat); % returns 1x21 array of sd's
 
 
 %% Normality
 % 1.	Check to see if the average walking speed per group passes a normality test (Kruski-Wallis?)
+        
+        normCntrl = kruskalwallis(control);
+        normTreat = kruskalwallis(treat);
 
-
-
+        % result: yes, both pass normality check.
 
 
 %% Comparison
 % 1.	Run a t-test (or non-parametric equivalent if wanted / needed) comparing the average walking speed between groups
+        
+        
