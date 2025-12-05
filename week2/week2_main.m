@@ -35,7 +35,7 @@ write(data, testInfo);
 cd ..
 
 % --------------- % 
-% create function for above steps
+% create function for above steps, reduces redundancy
 function write(data, testInfo)
     writematrix(data, 'data.csv');
     writelines(testInfo, 'info.txt');
@@ -43,20 +43,35 @@ end
 % --------------- % 
 
 
-
 %% create struct containing contents of /Data
 pathStruct = dir(mainPath); 
 
 
-% get contents from struct that are (1) isDir and (2) starts with 
-subjDirs = contents([pathStruct.isdir] & startsWith({pathStruct.name},'subject')); 
-    % subject, as noted in the struct. Returns new struct.
+% GOAL: get contents from struct that are (1) isDir and (2) starts with 
+% note: i had to have matlab copilot help me with this section. 
+
+% structure indexing and removing specific indexes of arrays is something i
+% struggle with - this task made me realize this.
+
+
+
+% make array of names within struct
+names = string({pathStruct.name});
+% make mask of names i actually want (the subject folders)
+namesMask = startsWith(names, 'subject','IgnoreCase',true); % returns logical vector whether names entry startsWith "subject"
+
+names = names(namesMask); % remove the two dot entries from the names array using the namesMask
+
+clear namesMask nSubj temp_nSubj testinfo data
+
+%%
 % construct both subject paths, so then we can loop through them and do operations
-subjPaths = fullfile(basePath,{subjDirs.name});
+subjPaths = fullfile(mainPath,names);
+
 
 %% use subjPaths contents to loop through and complete operation
 for i=1:length(subjPaths)
-    cd(subjPaths{i}) % nav to subject folder. uses i to index value of subjPaths cell array
+    cd(subjPaths{i}) % nav to subject folder. use i to index value of subjPaths cell array
     data = readmatrix('data.csv'); % load data.csv within folder
     data = data([1 2 3]); % change contents
     writematrix(data,'data.csv'); % save changes
@@ -72,10 +87,6 @@ end
 
 
 % Make sure numbers and names are unique to subject
-
-cd ..
-cd ..
-cd ..
 
 %% Script
 % Write a loop that iterates through all folders in the "Data" folder
