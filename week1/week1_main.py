@@ -36,8 +36,6 @@ q = {'1','2','3','4','5'}
 w = {'1','4'}
 
 
-
-
 # prompt 6
 # Sets (Python only):
 # Turn a list [1, 2, 2, 3, 4, 4, 5] into {1, 2, 3, 4, 5} using a set

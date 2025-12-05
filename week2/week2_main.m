@@ -31,6 +31,8 @@ writelines(testInfo,'info.txt')
 %% Add three numbers, separated by commas in each data.csv (e.g., 1,2,3)
 basePath = '/Users/DOB223/Library/CloudStorage/OneDrive-MedicalUniversityofSouthCarolina/Documents/lab/ac/ReproRehab/bootCamp/2week/Data';
 pathStruct = dir(basePath); % create struct containing contents of /Data
+
+% error here:
 subjDirs = contents([pathStruct.isdir] & startsWith({pathStruct.name},'subject')); % get contents from struct that are (1) isDir and (2) starts with 
     % subject, as noted in the struct. Returns new struct.
 % construct both subject paths, so then we can loop through them and do operations
@@ -55,18 +57,36 @@ end
 
 % Make sure numbers and names are unique to subject
 
+cd ..
+cd ..
+cd ..
 
 %% Script
 % Write a loop that iterates through all folders in the "Data" folder
 
+dirContent = dir("Data");
+
+for i=1:length(dirContent)
+    disp("I would be doing something here but Adam told me not to")
+end
 
 % Write a nested loop that iterates through all "Subject X" folders
+
+cd /Data
+
+
+for i:length(dirContent)
+    for 
+        
+    end
+end
 
 
 % Write code to load the data from data.csv and info.txt and print the results
 
 
-% Store the data as a dict (Python) / struct (MATLAB), where data from info is key and data from data is value (e.g., Dan: [1,2,3])
+% Store the data as a dict (Python) / struct (MATLAB), where data from info is key and data 
+% from data is value (e.g., Dan: [1,2,3])
 
 
 % Add another subject folder and verify that everything works and new data is added. 
@@ -74,6 +94,11 @@ end
 
 
 % MATLAB only: pre-allocate an array to hold your data
+
+
+
+
+
 
 
 
