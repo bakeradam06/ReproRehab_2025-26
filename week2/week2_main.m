@@ -68,7 +68,8 @@ clear namesMask nSubj temp_nSubj testinfo data
 % construct both subject paths, so then we can loop through them and do operations
 subjPaths = fullfile(mainPath,names);
 
-
+name1 = "Harry";
+name2 = "Potter";
 % use subjPaths contents to loop through and complete operation
 for i=1:length(subjPaths)
     cd(subjPaths{i}) % nav to subject folder. use i to index value of subjPaths cell array
@@ -77,10 +78,10 @@ for i=1:length(subjPaths)
     txtFile = readlines('info.txt');
     dataFile = readmatrix('data.csv');
     if i == 1
-        txtFile = 'Harry';
+        txtFile = name1;
         dataFile = [1 5 10 1 2575];
     else 
-        txtFile = 'Potter';
+        txtFile = name2;
         dataFile = [2575 1 10 5 1]; % oppppsite of above so they're unique from each other
     end
     writelines(txtFile,'info.txt');
@@ -132,7 +133,7 @@ end
         % end help. what's done next i did above.
         dotMask = startsWith(names,'.','IgnoreCase',true); % logical. which indices in names array are '.' and '..'
         nmMask = startsWith(names,'folder','IgnoreCase',true); % logical. list the indices where folders are.
-        finalMask = namesMask & isDirMask & ~dotMask; % create final mask for names of whcih i want
+        finalMask = nmMask & isDirMask & ~dotMask; % create final mask for names of whcih i want
         names = names(finalMask); % remove the indices i don't want anymore (anything but the folders)
         
         for q=1:length(names)
@@ -143,22 +144,48 @@ end
         cd ..
     end
 
-
-
 %% Write code to load the data from data.csv and info.txt and print the results
+
+
+% MATLAB only: pre-allocate an array to hold your data
+
+dataStruct = struct('key',zeros(1:2),'value',zeros(2,5)); % make struct, preallocate name field and data
+tempKey = [];
+tempData = [];
+
+    for i=1:length(subjPaths)
+        cd(subjPaths(i));
+        tempKey = readlines('info.txt');
+        tempValue = readmatrix('data.csv'); % load tempValue 
 
 
 % Store the data as a dict (Python) / struct (MATLAB), where data from info is key and data 
 % from data is value (e.g., Dan: [1,2,3])
 
-
-% Add another subject folder and verify that everything works and new data is added. 
-    % The goal here is to not have to modify the script every time a new subject is added
-
-
-% MATLAB only: pre-allocate an array to hold your data
+        dataStruct(i).key = tempKey{1}; % get only first entry from 2x1 str array. add to key of struct
+        dataStruct(i).value = tempValue; % add to value of struct
+        cd ..
+    end
 
 
+%% Add another subject folder and verify that everything works when new data are added. 
+% (The goal here is to not have to modify the script every time a new subject is added)
+
+    mkdir subject3
+    cd subject3/
+    writematrix(dataFile,'data.csv');
+    nameTemp = 'Ron';
+    writelines(nameTemp,'info.txt');
+
+
+    % now do similar operation as above loop
+
+    tempKey = readlines("info.txt");
+    tempKey = tempKey{1};
+    tempValue = readmatrix("data.csv");
+
+    dataStruct(3).key = tempKey;
+    dataStruct(3).value = tempValue;
 
 
 
@@ -167,7 +194,10 @@ end
 
 
 
-%%
+
+%% not part of assignemtn - we just tested this in week2 meeting. 
+% I don't suggest running the non-preallocated code below. it takes a while
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%% week 2 pod meeting notes %%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
