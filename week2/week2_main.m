@@ -90,8 +90,8 @@ end
 % Make sure numbers and names are unique to subject
 
 cd ..
-%% Script
-% Write a loop that iterates through all folders in the "Data" folder
+
+%% Write a loop that iterates through all folders in the "Data" folder
 
 txtFile2 = 'I am looping through all folders inside /Data dir';
 
@@ -101,18 +101,51 @@ for i=1:length(subjPaths)
     cd ..
 end
     
+%% Write a nested loop that iterates through all "Subject X" folders
 
-% % Write a nested loop that iterates through all "Subject X" folders
-% cd /Data
+    % to first do this, i'll make some new folders within each subject dir
+    cd subject1/
+    mkdir folder11
+    mkdir folder12
 
-% for i:length(dirContent)
-%     for 
-% 
-%     end
-% end
+    cd ..
+    cd subject2/
+    mkdir folder22
+    mkdir folder23
+
+    clear txtFile2 testInfo
+    %% now make nested loop
+    txtFile3 = "I'm now looping through each subject's individual folders";
+    
+    for i=1:length(subjPaths)
+        dirMask = isfolder(subjPaths(i));
+        cd(subjPaths(i));
+        
+        % copilot helped here. again, not good at indexing structures yet.
+        % I'll make not when help ceased.
+
+        what = dir; % list current folder
+        disp({what.name}); % print structure names 
+        disp({what.isdir}); % print which structure array is dir (logical)
+        names = string({what.name}); % get string array of names in structure
+        isDirMask = [what.isdir];  % logical mask of which are isdir. similar to above
+        % end help. what's done next i did above.
+        dotMask = startsWith(names,'.','IgnoreCase',true); % logical. which indices in names array are '.' and '..'
+        nmMask = startsWith(names,'folder','IgnoreCase',true); % logical. list the indices where folders are.
+        finalMask = namesMask & isDirMask & ~dotMask; % create final mask for names of whcih i want
+        names = names(finalMask); % remove the indices i don't want anymore (anything but the folders)
+        
+        for q=1:length(names)
+            cd(names(q)) % cd into the first index of folder
+            writelines(txtFile3,'txtFile3.txt'); % write txt file inside the folder
+            cd .. % go up one level to repeat
+        end
+        cd ..
+    end
 
 
-% Write code to load the data from data.csv and info.txt and print the results
+
+%% Write code to load the data from data.csv and info.txt and print the results
 
 
 % Store the data as a dict (Python) / struct (MATLAB), where data from info is key and data 
