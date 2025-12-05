@@ -1,8 +1,5 @@
 %% week 8 main
  
-
-
-
  
 %% Data
     % 1.	Generate two sets of data (2D matrices) that will represent the control and test groups walking speed
@@ -52,7 +49,6 @@
         % returns 21x1 array of means by column (avging across trials by participant)
 
 
-
         % no help on this section, juist trial and error
 
 %% 2.	Calculate the standard deviation of walking speed per participant (across trials) for each group
@@ -90,4 +86,9 @@
 %% Comparison
 % 1.	Run a t-test (or non-parametric equivalent if wanted / needed) comparing the average walking speed between groups
         
-        
+        % parametric
+        [h,p,ci, stats] = ttest2(meanControl, meanTreat,"Alpha",0.05,"Tail","both");
+
+        % non parametric - wilcoxon rank sum
+        [ p2, h2, stat] = ranksum(meanControl, meanTreat, "Alpha", 0.05, "Tail","both");
+
