@@ -89,6 +89,8 @@
         % parametric
         [h,p,ci, stats] = ttest2(meanControl, meanTreat,"Alpha",0.05,"Tail","both");
 
-        % non parametric - wilcoxon rank sum
-        [ p2, h2, stat] = ranksum(meanControl, meanTreat, "Alpha", 0.05, "Tail","both");
+        % non parametric - wilcoxon rank sum - if these data were not
+        % normally distributed 
+        [p2, h2, stat] = ranksum(meanControl, meanTreat, "Alpha", 0.05, "Tail","both");
+       
 
