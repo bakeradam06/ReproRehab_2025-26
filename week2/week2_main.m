@@ -13,10 +13,18 @@ cd('/Users/DOB223/Library/CloudStorage/OneDrive-MedicalUniversityofSouthCarolina
 mkdir subject1
 mkdir subject2
 
+% below for rest of section: i had to use matlab copilot to help me with this.
+% i heavily document these tasks to ensure i understand all that is going on in the code.
+
+temp_nSubj = dir(fullfile(pwd,'*')); % create struct, and struct.name contains list of subjects plus two extra entries ('.' and '..')
+isSubj = [nSubj.isdir] & ~ismember({temp_nSubj.name},{'.','..'}); % get logical array of which entry includes subject names, exclude the dots
+nSubj = sum(isSubj); % return count of how many subjects present as "1" in above logical array (2). 
+
+
 %% Within each "Subject X", add two files: data.csv and info.txt
 % cd subject1
 data = [1,2,3,4,5];
-testInfo = "this is a test file. mua hahahahahah (as an evil villan)";
+testInfo = "this is a test file for ReproRehab";
 
 % add files
 cd subject1/ % get to subject1 folder 
@@ -26,17 +34,29 @@ cd ..
 cd subject2/ % with this and above line, get to subject2
 writematrix(data, 'data.csv')
 writelines(testInfo,'info.txt') 
-% i'm sure there is better way to do this (loop), but will wait unitl we talk about it in the meeting to proceed with this. 
+
+cd ..
 
 %% Add three numbers, separated by commas in each data.csv (e.g., 1,2,3)
-basePath = '/Users/DOB223/Library/CloudStorage/OneDrive-MedicalUniversityofSouthCarolina/Documents/lab/ac/ReproRehab/bootCamp/2week/Data';
-pathStruct = dir(basePath); % create struct containing contents of /Data
 
-% error here:
-subjDirs = contents([pathStruct.isdir] & startsWith({pathStruct.name},'subject')); % get contents from struct that are (1) isDir and (2) starts with 
-    % subject, as noted in the struct. Returns new struct.
-% construct both subject paths, so then we can loop through them and do operations
-subjPaths = fullfile(basePath,{subjDirs.name});
+
+
+
+% %%
+% for i=1:length()
+
+% pathStruct = dir(basePath); % create struct containing contents of /Data
+
+
+% 
+% 
+% 
+% %% 
+% % error here:
+% subjDirs = contents([pathStruct.isdir] & startsWith({pathStruct.name},'subject')); % get contents from struct that are (1) isDir and (2) starts with 
+%     % subject, as noted in the struct. Returns new struct.
+% % construct both subject paths, so then we can loop through them and do operations
+% subjPaths = fullfile(basePath,{subjDirs.name});
 
 %% use subjPaths contents to loop through and complete operation
 for i=1:length(subjPaths)
@@ -70,10 +90,9 @@ for i=1:length(dirContent)
     disp("I would be doing something here but Adam told me not to")
 end
 
+
 % Write a nested loop that iterates through all "Subject X" folders
-
 cd /Data
-
 
 for i:length(dirContent)
     for 
