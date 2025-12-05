@@ -69,37 +69,41 @@ clear namesMask nSubj temp_nSubj testinfo data
 subjPaths = fullfile(mainPath,names);
 
 
-%% use subjPaths contents to loop through and complete operation
+% use subjPaths contents to loop through and complete operation
 for i=1:length(subjPaths)
     cd(subjPaths{i}) % nav to subject folder. use i to index value of subjPaths cell array
-    data = readmatrix('data.csv'); % load data.csv within folder
-    data = data([1 2 3]); % change contents
-    writematrix(data,'data.csv'); % save changes
+
     % Add name to info.txt (e.g., Dan)
     txtFile = readlines('info.txt');
+    dataFile = readmatrix('data.csv');
     if i == 1
-        txtFile = 'my name is Harry';
+        txtFile = 'Harry';
+        dataFile = [1 5 10 1 2575];
     else 
-        txtFile = 'my name is Potter';
+        txtFile = 'Potter';
+        dataFile = [2575 1 10 5 1]; % oppppsite of above so they're unique from each other
     end
     writelines(txtFile,'info.txt');
+    writematrix(dataFile,'data.csv');
 end
-
 
 % Make sure numbers and names are unique to subject
 
+cd ..
 %% Script
 % Write a loop that iterates through all folders in the "Data" folder
 
-dirContent = dir("Data");
+txtFile2 = 'I am looping through all folders inside /Data dir';
 
-for i=1:length(dirContent)
-    disp("I would be doing something here but Adam told me not to")
+for i=1:length(subjPaths)
+    cd(subjPaths(i));
+    writelines(txtFile2, 'info2.txt');
+    cd ..
 end
+    
 
-
-% Write a nested loop that iterates through all "Subject X" folders
-cd /Data
+% % Write a nested loop that iterates through all "Subject X" folders
+% cd /Data
 
 % for i:length(dirContent)
 %     for 
