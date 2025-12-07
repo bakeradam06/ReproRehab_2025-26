@@ -32,7 +32,7 @@ dataAvg = [avgControl,avgExperimental];
 
 %%
 figure
-e = bar(dataAvg,'green'); % note: had some help from chatGPT with below next few lines. 
+e = bar(dataAvg,'green'); % note: had some help from chatGPT with below next few lines for syntax of making plots. 
 e.FaceColor = 'flat';  % allow setting individual bar colors
 e.CData = [1 0 0; 0 0 1];  % red & blue
 
@@ -58,7 +58,6 @@ xlabel('frequency','FontSize',28,'FontName','CMU Serif')
 ylabel('outcome occurrence','FontSize',28,'FontName','CMU Serif')
 
 % Set x and y tick text size to 12
-
 ax.XAxis.FontSize = 12;
 ax.YAxis.FontSize = 12;
 
@@ -71,24 +70,38 @@ legend('Direction','normal','Box','off','Color','Blue','FontName','CMU Serif','A
 
 % Show that the two groups are significantly different 
     % MATLAB - sigstar
-%% sigstar package
-% as of 10/17/25, i'm not sure yet how this works. I ran out of time this day to work on it
-sigstar(dataAvg,'ttest','nosort');
+%% sigstar package (matlab add on. add significance stars to a plot)
+%addpath('/Users/DOB223/Library/CloudStorage/OneDrive-MedicalUniversityofSouthCarolina/Documents/MATLAB/sigstar')
+
+% note: ai helped a little with the syntax/process of getting sigstar to work. most of it was syntax suggetsions 
+% and what arguemtns to use.
+
+% need figure first,
+% run t test,
+% use sigstar to add significance stars to bar chart.
 
 
+% combine data 
+dataAll = [experimental,control];
 
-
-    % Python - YOYO (your own your own)
+figure
+plot1 = bar(dataAll); % make bar figure of dataset
+[h,p,ci] = ttest2(dataAll(:,1),dataAll(:,2)); % two sample t test, default settings
+sigstar({[1,2]},p) % add significance stars to plot. p argument is from ttest2 output.
  
 %% Saving
 % Save figure in publication format (.pdf)
 exportgraphics(e,'barPlotTest.png','Resolution',600);
 
-% dpi = 300 for Python
-
-%% Bonus / Shameless Plug / Flex 
+%% Bonus
 % Save figure in folder of current date/time to stay organized
-    % Matlab: https://tulimid1.github.io/savingfigures/MATLAB/
-    % Python: https://tulimid1.github.io/savingfigures/Python/
+% Matlab: https://tulimid1.github.io/savingfigures/MATLAB/ (Jesse: this is my TAs github repo. He put this in here as example. 
+
+    % get date as variable
+    date_dir = sprintf('%s', date); 
+
+
+
+    
 
 % Put figure making process into a loop and iterate three times to get three publication ready figures
