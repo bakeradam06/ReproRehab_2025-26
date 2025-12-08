@@ -82,5 +82,5 @@ drawnow % comment out for non-precompute
             addpoints(p3,x(i),y(i),time(i))
             drawnow limitrate
             pause(0.0000001);
-            exportgraphics(gcf,'3Dspiral.gif');
+            exportgraphics(gcf,'3Dspiral.gif', "Append", true);
         end
