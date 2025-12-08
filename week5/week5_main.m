@@ -11,32 +11,45 @@
 %% AB: comments below are my notes re the code.
 % helps me figure out how to break the large function into multiple different ones.
 
-values = [5, 10, 15, 20]; % list the values to be used in the function
-[s] = calc();
-    
-    function [s] = calc() % defining function, inputs & outputs
-        s = 0; % define s
-    end
+    values = [5, 10, 15, 20]; % list the values to be used in the function
+    [s] = calc();
 
-[s, values] = loop(values);
+        % ------------------ %
+        function [s] = calc() % defining function, inputs & outputs
+            s = 0; % define s
+        end
+        % ------------------ %
+%%
+    disp(values)
+    disp(s)
+    [s, values] = loop(s, values);
     
-    function [s, values] = loop(values)
-        for i = 1:length(values) % initiate loop, length of vals variable
-            s = s + values(i); % iterate over ever instace of s starting with 0
-        end % terminate loop
-    end
-    
-[s, avg, min_val, max_val] = calculate(s, values); % run the function on above values
+        % ------------------ %
+        function [s, values] = loop(s, values)
+            for i = 1:length(values) % initiate loop, length of vals variable
+                s = s + values(i); % iterate over ever instace of s starting with 0
+            end % terminate loop
+        end
+        % ------------------ %
 
-    function [avg, max_val, min_val] = calculate(values, s)
-        avg = s/length(values); % calculate avg of s/length(vals)
-        max_val = max(values); % same but max 
-        min_val = min(values); % same but min 
+%%
+    [s, avg, min_val, max_val] = calculate(s, values); % run the function on above values
     
-    end
+         % ------------------ %
+        function [avg, max_val, min_val] = calculate(values, s)
+            avg = s/length(values); % calculate avg of s/length(vals)
+            max_val = max(values); % same but max 
+            min_val = min(values); % same but min 
+        end
+         % ------------------ %
     
-[d] = printing(s, avg, max_val, min_val);
 
-    function [s, avg, max_val, min_val] = printing(s, avg, max_val, min_val)
-        d = fprintf('Sum: %d Average: %.2f Maximum: %d Minimum: %d', s, avg, max_val, min_val); % print avg, min, max
-    end
+
+    [d] = printing(s, avg, max_val, min_val);
+
+    
+        % ------------------ %
+        function [s, avg, max_val, min_val] = printing(s, avg, max_val, min_val)
+            d = fprintf('Sum: %d Average: %.2f Maximum: %d Minimum: %d', s, avg, max_val, min_val); % print avg, min, max
+        end
+        % ------------------ %

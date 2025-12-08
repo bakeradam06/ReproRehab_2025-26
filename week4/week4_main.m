@@ -47,20 +47,41 @@ drawnow % comment out for non-precompute
         end
         drawnow
 
-% 6.	Create a figure with 2 subplots
+%% 6.	Create a figure with 2 subplots
     % a.	Sine wave and Cosine wave over time
+        tiempo = 0:0.1:2*pi; 
+        tiempo2 = 0:0.1:2*pi; % make same length
+        sin2 = sin(tiempo);
+        cos2 = cos(tiempo2);
+
     % b.	Sine (x) and cosine (y) waves together
+        tiledlayout(1,2);    
+        nexttile
+        plot(sin2);
+        nexttile
+        plot(cos2);
 
+    % ref: TiledLayout2By2Example.mlx to remind myself how tiledlayout works
 
-% Extra Credit
+%% Extra Credit
 % Create a 3D Spiral
 
 % 1.	Create a time variable from 1 to 1000
-
+        time = 1:6:1000;
 % 2.	Create an x variable that is a sine wave across time
-
+        x = sin(time);
 % 3.	Create an y variable that is a sine wave across time
-
-% 4.	Animate  X (on x axis),Y (on y axis), and Time (on z axis) on the same figure to produce a 3D spiral (see examples below)
-
+        y = sin(time-16); % changed the phase from x so they're not the same data points
+% 4.	Animate  X (on x axis),Y (on y axis), and Time (on z axis) on the same figure to produce a 3D spiral
+        figure
+        p3 = animatedline('Marker','o');
+        
+        view(3) % ai helped me debug the code i wrote. I was missing this command and getting only 2d plots.
+        drawnow
+        for i=1:length(time)
+            addpoints(p3,x(i),y(i),time(i))
+            drawnow limitrate
+            pause(0.0000001);
+            exportgraphics(gcf,'3Dspiral.gif');
+        end
 
