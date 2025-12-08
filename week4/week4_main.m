@@ -84,4 +84,3 @@ drawnow % comment out for non-precompute
             pause(0.0000001);
             exportgraphics(gcf,'3Dspiral.gif');
         end
-
