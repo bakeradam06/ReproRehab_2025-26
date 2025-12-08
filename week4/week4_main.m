@@ -4,7 +4,7 @@
 
 %% 1.	Create a time variable that starts at 0 and ends at 2*pi
         % a. use whatever granularity you want
-tiempo = [0:0.01:2*pi];
+tiempo = [0:0.1:2*pi];
 
 %% 2.	Create a sine wave variable
 sign = sin(tiempo);
@@ -18,17 +18,11 @@ drawnow % if you uncomment this, it won't precompute and will be slower. goes wi
 for i = 1:length(tiempo)
     addpoints(p,tiempo(i),sign(i));
     drawnow limitrate % cahnge to update if want slow version
-    pause(0.5); % pause for a brief moment between frames
+    pause(0.15); % pause for a brief moment between frames
     % b.	Save as .gif
     exportgraphics(gcf,'sine.gif',"Append", true)
 end
 drawnow % comment out for non-precompute
-
-% 
-% fig = gcf;
-% 
-% exportgraphics(fig,'sine.gif','Append', true,'Resolution',600)
-
 
 % help from:
 % PrecomputeDataThenCreateAnimationExample.m
@@ -36,9 +30,22 @@ drawnow % comment out for non-precompute
 % ExportgraphicsAnimatedGifExample.m
 
 %% 4.	Create a cosine wave variable
+    tiempo2 = 0:0.1:2*pi; 
+    cos1 = cos(tiempo2);
 
 % 5.	Create an animation of the cosine wave over time 
-    % a.	Save .gif
+        figure
+        p2 = animatedline;
+        drawnow % if you uncomment this, it won't precompute and will be slower. goes with comments below
+        
+        for i = 1:length(tiempo2)
+            addpoints(p2,tiempo2(i),cos1(i));
+            drawnow limitrate % cahnge to update if want slow version
+            pause(0.15); % pause for a brief moment between frames
+            % b.	Save as .gif
+            exportgraphics(gcf,'cosine.gif',"Append", true)
+        end
+        drawnow
 
 % 6.	Create a figure with 2 subplots
     % a.	Sine wave and Cosine wave over time
